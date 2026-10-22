@@ -8,7 +8,7 @@ from threading import Thread
 import asyncio
 
 # --- 1. TELEGRAM BOT & CHANNEL CONFIGURATION ---
-BOT_TOKEN = '8933569726:AAH-XJyHnXEoKeWmenkgYdqRXYkiLHtw11U'  # BotFather থেকে পাওয়া আপনার বোটের আসল টোকেন দিন
+BOT_TOKEN = '8933569726:AAHLDfjv7DdEeqjOzcQ55d4BU8ZGolMo_LI'  # BotFather থেকে পাওয়া আপনার বোটের আসল টোকেন দিন
 CHANNEL_ID = '@VerifyCryptoMining'  # আপনার টেলিগ্রাম চ্যানেলের ইউজারনেম
 
 # --- 2. FLASK WEB SERVER FOR API ---
