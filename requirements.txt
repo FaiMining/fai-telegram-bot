@@ -1,4 +1,4 @@
 python-telegram-bot
 flask
 flask-cors
-pip install python-dotenv
+python-dotenv
