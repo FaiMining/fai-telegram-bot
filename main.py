@@ -6,10 +6,14 @@ from telegram import Update, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from threading import Thread
 import asyncio
+from dotenv import load_dotenv
+
+# --- Load Environment Variables ---
+load_dotenv()
 
 # --- 1. TELEGRAM BOT & CHANNEL CONFIGURATION ---
-BOT_TOKEN = '8933569726:AAHLDfjv7DdEeqjOzcQ55d4BU8ZGolMo_LI'  # Enter your actual bot token received from BotFather
-CHANNEL_ID = '@VerifyCryptoMining'  # Your Telegram channel username
+BOT_TOKEN = os.getenv('BOT_TOKEN')  # Fetches token from .env file or Render Environment Variables
+CHANNEL_ID = os.getenv('CHANNEL_ID')  # Fetches channel username
 
 # --- 2. FLASK WEB SERVER FOR API ---
 app = Flask(__name__)
@@ -62,7 +66,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         member = await context.bot.get_chat_member(chat_id=CHANNEL_ID, user_id=user_id)
         
         if member.status in ['member', 'administrator', 'creator']:
-            # If the user is a channel member, a valid 6-digit OTP code will be generated
+            # If the user is a channel member, generate a valid 6-digit OTP code
             base_num = random.randint(15, 140) * 7000 + random.randint(10, 99)
             auth_code = (base_num // 7) * 7
             
