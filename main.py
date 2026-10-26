@@ -42,7 +42,7 @@ def verify_task():
 
         return jsonify({
             "status": "error",
-            "message": "Invalid Verification Code! Get valid code from @FaiMiningVerify_bot"
+            "message": "Invalid Verification Code! Get valid code from @CCW_NetworkVerification_bot"
         }), 400
 
     except Exception as e:
@@ -90,7 +90,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
     except Exception as e:
         await update.message.reply_text(
-            f"⚠️ **Error:** Make sure you joined {CHANNEL_ID} and added @FaiMiningVerify_bot as Administrator in the channel!"
+            f"⚠️ **Error:** Make sure you joined {CHANNEL_ID} and added @CCW_NetworkVerification_bot as Administrator in the channel!"
         )
 
 # --- 4. MAIN EXECUTION ENGINE ---
