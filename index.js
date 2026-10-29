@@ -36,7 +36,7 @@ bot.command('getcode', async (ctx) => {
     // 1. Check if user already claimed task using this Telegram ID
     const claimedSnap = await db.ref(`claimedTelegramIds/${telegramUserId}`).once('value');
     if (claimedSnap.val() === true) {
-      return ctx.reply(`❌ Apnar ei Telegram account theke agei ekbar task verify kora hoyeche! Prottek user shudhu 1 bar reward pete paren.`);
+      return ctx.reply(`❌ You have already verified a task using this Telegram account! Each user can only claim the reward once.`);
     }
 
     // 2. Check if user has joined Telegram Channel
@@ -44,7 +44,7 @@ bot.command('getcode', async (ctx) => {
     const isMember = ['creator', 'administrator', 'member'].includes(member.status);
 
     if (!isMember) {
-      return ctx.reply(`❌ Apni ekono amader channel-e join korni! Age join korun: ${CHANNEL_USERNAME}`);
+      return ctx.reply(`❌ You haven't joined our channel yet! Please join first: ${CHANNEL_USERNAME}`);
     }
 
     // 3. Generate 6-digit Random OTP Code
@@ -58,11 +58,11 @@ bot.command('getcode', async (ctx) => {
       expiresAt: Date.now() + (10 * 60 * 1000) // 10 minutes validity
     });
 
-    return ctx.reply(`✅ Apnar 6-digit OTP verification code: ${otpCode}\n\n⚠️ Ei code-ti shudhu 1 bar ebong apnar ei Telegram ID diyei use kora jabe.`);
+    return ctx.reply(`✅ Your 6-digit OTP verification code: ${otpCode}\n\n⚠️ This code can only be used once and is bound to your Telegram ID.`);
 
   } catch (error) {
     console.error('Error in getcode command:', error);
-    return ctx.reply('⚠️ Service error! Pore abar chesta korun.');
+    return ctx.reply('⚠️ Service error! Please try again later.');
   }
 });
 
@@ -88,12 +88,12 @@ app.post('/api/verify-task', async (req, res) => {
 
     // Check 2: OTP already used
     if (otpData.used === true) {
-      return res.status(400).json({ status: 'error', message: 'Ei OTP code-ti agei use kora hoye geche!' });
+      return res.status(400).json({ status: 'error', message: 'This OTP code has already been used!' });
     }
 
     // Check 3: OTP expired
     if (Date.now() > otpData.expiresAt) {
-      return res.status(400).json({ status: 'error', message: 'Ei OTP code-er meyad shesh (Expired)!' });
+      return res.status(400).json({ status: 'error', message: 'This OTP code has expired!' });
     }
 
     const telegramId = otpData.telegramId;
@@ -101,9 +101,8 @@ app.post('/api/verify-task', async (req, res) => {
     // Check 4: TELEGRAM ID BINDING CHECK (Critical Security)
     const claimedSnap = await db.ref(`claimedTelegramIds/${telegramId}`).once('value');
     if (claimedSnap.val() === true) {
-      // Mark this attempted code as used too just in case
       await otpRef.update({ used: true });
-      return res.status(400).json({ status: 'error', message: 'Ei Telegram ID diye already onno account-e task verify kora hoyeche!' });
+      return res.status(400).json({ status: 'error', message: 'This Telegram ID has already been used to verify an account!' });
     }
 
     // Mark OTP as Used & Lock Telegram ID permanently
