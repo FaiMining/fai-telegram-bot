@@ -7,8 +7,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Firebase Admin SDK Initialization
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+// Safe Firebase Initialization
+let serviceAccount;
+try {
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+} catch (e) {
+  console.error("❌ FIREBASE_SERVICE_ACCOUNT JSON parse error:", e.message);
+  process.exit(1);
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
