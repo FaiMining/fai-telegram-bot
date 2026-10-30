@@ -57,7 +57,7 @@ bot.start(async (ctx) => {
       expiresAt: Date.now() + (10 * 60 * 1000) // Valid for 10 minutes
     });
 
-    return ctx.reply(`✅ \n\nYour 6-digit OTP code below (Tap to copy):\n\n\`${otpCode}\`\n\n⚠️ This code can only be used once and is bound to your Telegram ID.`, {
+    return ctx.reply(`\n\nYour 6-digit OTP code below (Tap to copy):\n\n\`${otpCode}\`\n\n⚠️ This code can only be used once and is bound to your Telegram ID.`, {
   parse_mode: 'Markdown'
 });
 
