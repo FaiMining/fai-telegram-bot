@@ -7,6 +7,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Root route / Health check endpoint to prevent "Cannot GET /" and keep cron-job active
+app.get('/', (req, res) => {
+  res.status(200).send('CCW Network Bot Server is Alive and Running!');
+});
+
 // Safe Firebase Initialization
 let serviceAccount;
 try {
@@ -58,8 +63,8 @@ bot.start(async (ctx) => {
     });
 
     return ctx.reply(`🔑 Your 6-digit OTP code below (Tap to copy):\n\n\`${otpCode}\`\n\n⚠️ This code can only be used once and is bound to your Telegram ID.`, {
-  parse_mode: 'Markdown'
-});
+      parse_mode: 'Markdown'
+    });
 
   } catch (error) {
     console.error('Error in start command:', error);
